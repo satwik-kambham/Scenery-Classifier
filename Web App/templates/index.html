@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Skeleton CSS -->
+    <link rel="stylesheet" href="../static/css/normalize.css">
+    <link rel="stylesheet" href="../static/css/skeleton.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../static/css/style.css">
+
+    <title>Scenery Classifier</title>
+</head>
+
+<body>
+    <!-- Chart.js -->
+    <script src="../static/js/chart.js"></script>
+
+    <div class="container">
+        <h3>Scenery Classification using Logic Regression</h3>
+        <form action="{{ url_for('train') }}" method="post">
+            <div class="row">
+                <div class="six columns">
+                    <label for="exampleRecipientInput">Category 1</label>
+                    <select class="u-full-width" name="category-1" id="category-1">
+                        <option value="buildings">Buildings</option>
+                        <option value="forest">Forest</option>
+                        <option value="glacier">Glacier</option>
+                        <option value="mountain">Mountain</option>
+                        <option value="sea">Sea</option>
+                        <option value="street">Street</option>
+                    </select>
+                </div>
+                <div class="six columns">
+                    <label for="exampleRecipientInput">Category 2</label>
+                    <select class="u-full-width" name="category-2" id="category-2">
+                        <option value="buildings">Buildings</option>
+                        <option value="forest">Forest</option>
+                        <option value="glacier">Glacier</option>
+                        <option value="mountain">Mountain</option>
+                        <option value="sea">Sea</option>
+                        <option value="street">Street</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="four columns">
+                    <label for="epochs">Epochs</label>
+                    <input class="u-full-width" type="number" placeholder="100" name="epochs" id="epochs">
+                </div>
+                <div class="four columns">
+                    <label for="learning-rate">Learning Rate</label>
+                    <input id="learning-rate" class="u-full-width" 
+                    type="number" step="any" placeholder="0.01" name="learning-rate">
+                </div>
+                <div class="four columns">
+                    <label for="log-rate">Log Rate</label>
+                    <input class="u-full-width" id="log-rate" 
+                    type="number" placeholder="10" name="log-rate">
+                </div>
+            </div>
+            <input class="u-full-width button-primary" type="submit" value="Train">
+        </form>
+    </div>
+</body>
+
+</html>

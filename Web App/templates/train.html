@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Skeleton CSS -->
+    <link rel="stylesheet" href="../static/css/normalize.css">
+    <link rel="stylesheet" href="../static/css/skeleton.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../static/css/style.css">
+
+    <title>Scenery Classifier</title>
+</head>
+
+<body>
+    <!-- Chart.js -->
+    <script src="../static/js/chart.js"></script>
+
+    <div class="container">
+        <h3>Scenery Classification using Logic Regression</h3>
+
+        <table class="u-max-full-width">
+            <thead>
+                <tr>
+                    <th>Category 1</th>
+                    <th>category 2</th>
+                    <th>Epochs</th>
+                    <th>Learning Rate</th>
+                    <th>Log Rate</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ training_parameters['category-1'] }}</td>
+                    <td>{{ training_parameters['category-2'] }}</td>
+                    <td>{{ training_parameters['epochs'] }}</td>
+                    <td>{{ training_parameters['learning-rate'] }}</td>
+                    <td>{{ training_parameters['log-rate'] }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <canvas id="epochs-v-cost"></canvas>
+    </div>
+
+    <script src="../static/js/script.js"></script>
+</body>
+
+</html>
