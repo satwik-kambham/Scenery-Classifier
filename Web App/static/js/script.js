@@ -46,7 +46,33 @@ function addData(chart, label, data) {
 let eventSource = new EventSource('/data')
 eventSource.onmessage = (e) => {
     let data = JSON.parse(e.data)
-    if (data != "Depleted") {
+    if (data.epoch == -1 && data.cost == -1) {
+        eventSource.close()
+        document.getElementById('save').disabled = false
+
+    } else if (data != "Depleted") {
         addData(myChart, data.epoch, data.cost)
     }
 }
+
+document.getElementById('file-selector').addEventListener('change', (e) => {
+    url = URL.createObjectURL(e.target.files[0])
+    document.getElementById('image-preview').src = url
+})
+
+document.getElementById('upload-image').addEventListener('click', (e) => {
+    document.getElementById('test').disabled = false
+})
+
+document.getElementById('test').addEventListener('click', () => {
+    fetch('/predict')
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('pred').innerText = data.label
+        document.getElementById('conf').innerText = data.prediction
+    })
+})
+
+document.getElementById('save').addEventListener('click', () => {
+    fetch('/store')
+})

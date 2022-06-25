@@ -48,19 +48,24 @@
                 </div>
             </div>
             <div class="row">
-                <div class="four columns">
+                <div class="three columns">
                     <label for="epochs">Epochs</label>
                     <input class="u-full-width" type="number" placeholder="100" name="epochs" id="epochs">
                 </div>
-                <div class="four columns">
+                <div class="three columns">
                     <label for="learning-rate">Learning Rate</label>
                     <input id="learning-rate" class="u-full-width" 
                     type="number" step="any" placeholder="0.01" name="learning-rate">
                 </div>
-                <div class="four columns">
+                <div class="three columns">
                     <label for="log-rate">Log Rate</label>
                     <input class="u-full-width" id="log-rate" 
                     type="number" placeholder="10" name="log-rate">
+                </div>
+                <div class="three columns">
+                    <label for="batch-size">Batch Size (-1 for all)</label>
+                    <input class="u-full-width" id="batch-size" 
+                    type="number" placeholder="50" name="batch-size">
                 </div>
             </div>
             <input class="u-full-width button-primary" type="submit" value="Train">

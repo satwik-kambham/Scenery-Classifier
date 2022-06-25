@@ -45,6 +45,37 @@
         </table>
 
         <canvas id="epochs-v-cost"></canvas>
+        <br><br>
+
+        <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+        <form action="upload" method="POST" enctype="multipart/form-data" target="dummyframe">
+            <div class="row">
+                <input class="six columns" type="file" name="file" id="file-selector" />
+                <input class="six columns" type="submit" id="upload-image" value="Upload"/>
+            </div>
+        </form>
+        <img id="image-preview" src="">
+
+        <button class="u-full-width button-primary" id="test" disabled>Classify</button>
+
+
+        <table class="u-max-full-width">
+            <thead>
+                <tr>
+                    <th>Prediction</th>
+                    <th>Confidence</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="pred"></td>
+                    <td id="conf"></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <button class="u-full-width button-primary" id="save" disabled>Save Model</button>
     </div>
 
     <script src="../static/js/script.js"></script>

@@ -1,4 +1,6 @@
+import json
 import numpy as np
+from PIL import Image
 
 class Classifier:
     def __init__(self, training_data: np.ndarray, training_labels: np.ndarray, training_parameters: dict):
@@ -35,22 +37,6 @@ class Classifier:
             ndarray: Cost of model.
         """
         return (-1 / y.shape[0]) * np.sum(np.dot(y, np.log(y_hat + 1e-5).T) + np.dot((1 - y), np.log(1 - y_hat + 1e-5).T), axis = 1)
-    
-
-    def predict(self, X: np.ndarray):
-        """Predicts labels for given data using the formula: y = m*x + c.
-
-        Args:
-            X (numpy array): Numpy array containing all the images which need to be classified.
-
-        Returns:
-            numpy array: Labels for given data.
-            numpy array: Numerical prediction ranging from 0 to 1.
-        """
-        
-        prediction = self.sigmoid(np.dot(self.m, X.T) + self.c)
-        label = np.where(prediction > 0.5, 1, 0)
-        return label, prediction
 
 
     def train(self, callback = None):
@@ -64,6 +50,9 @@ class Classifier:
             if epoch % debug_print_rate == 0 and callback is not None:
                 callback(epoch, cost)
                 print(f'Epoch: {epoch}, Cost: {cost}')
+
+        if callback is not None:
+            callback(-1, -1)
 
 
     def train_one_iteration(self, X: np.ndarray, Y: np.ndarray, learning_rate: float):
@@ -86,3 +75,32 @@ class Classifier:
         self.m = self.m - learning_rate * dm
         self.c = (self.c - learning_rate * dc)[0][0]
         return cost
+
+    def predict(self, X: np.ndarray):
+        """Predicts labels for given data using the formula: y = m*x + c.
+
+        Args:
+            X (numpy array): Numpy array containing all the images which need to be classified.
+
+        Returns:
+            numpy array: Labels for given data.
+            numpy array: Numerical prediction ranging from 0 to 1.
+        """
+        
+        prediction = self.sigmoid(np.dot(self.m, X.T) + self.c)
+        label = np.where(prediction > 0.5, 1, 0)
+        return label, prediction
+
+    def test(self, img_path):
+        print(img_path, type(img_path))
+        img = Image.open(img_path)
+        img = img.resize([150, 150])
+        img = np.array(img)
+        img = img.reshape(150*150*3)
+        img = img / 255
+
+        return self.predict(img)
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__, 
+            sort_keys=True, indent=4)
