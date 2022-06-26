@@ -1,18 +1,24 @@
-import json
+import h5py
 import numpy as np
 from PIL import Image
 
 class Classifier:
-    def __init__(self, training_data: np.ndarray, training_labels: np.ndarray, training_parameters: dict):
-        self.training_data = training_data
-        self.training_labels = training_labels.T
-        self.training_parameters = training_parameters
-
-        print(self.training_data.shape, self.training_labels.shape)
-
-        # Initialize parameters (m, c) with zeros
-        self.m = np.zeros((1, training_data.shape[1]))
-        self.c = float(0)
+    def __init__(self, m, c, epochs, learning_rate, log_rate, category_1, category_2, training_data = None, training_labels = None):
+        self.m = m
+        self.c = c
+        self.training_parameters = {
+            'epochs': epochs,
+            'learning-rate': learning_rate,
+            'log-rate': log_rate,
+            'category-1': category_1,
+            'category-2': category_2
+        }
+        if training_data is not None:
+            self.training_data = training_data
+            self.training_labels = training_labels
+        else:
+            self.training_data = None
+            self.training_labels = None
 
     def sigmoid(self, x: np.ndarray):
         """Returns sigmoid of numpy array.
@@ -101,6 +107,56 @@ class Classifier:
 
         return self.predict(img)
 
-    def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__, 
-            sort_keys=True, indent=4)
+
+    def to_hdf(self, fname, store_training_data = False):
+        with h5py.File(fname, 'w') as f:
+            model_group = f.require_group('model')
+            model_group.clear()
+
+            model_group.create_dataset('m', data=self.m)
+            model_group.create_dataset('c', data=self.c)
+            
+            training_parameters_group = model_group.require_group('training-parameters')
+            training_parameters_group.create_dataset('epochs', data=self.training_parameters['epochs'])
+            training_parameters_group.create_dataset('learning-rate', data=self.training_parameters['learning-rate'])
+            training_parameters_group.create_dataset('log-rate', data=self.training_parameters['log-rate'])
+            training_parameters_group.create_dataset('category-1', data=self.training_parameters['category-1'])
+            training_parameters_group.create_dataset('category-2', data=self.training_parameters['category-2'])
+
+            if store_training_data:
+                training_data_group = model_group.require_group('training-data')
+                training_data_group.create_dataset('data', data=self.training_data)
+                training_data_group.create_dataset('labels', data=self.training_labels)
+
+
+    @classmethod
+    def from_hdf(cls, fname):
+        with h5py.File(fname, 'r') as f:
+            model_group = f['model']
+            m = model_group['m'][()]
+            c = model_group['c'][()]
+            training_parameters_group = model_group['training-parameters']
+            epochs = training_parameters_group['epochs'][()].decode('utf-8')
+            learning_rate = training_parameters_group['learning-rate'][()].decode('utf-8')
+            log_rate = training_parameters_group['log-rate'][()].decode('utf-8')
+            category_1 = training_parameters_group['category-1'][()].decode('utf-8')
+            category_2 = training_parameters_group['category-2'][()].decode('utf-8')
+            if 'training-data' in model_group:
+                training_data_group = model_group['training-data']
+                training_data = training_data_group['data'][()]
+                training_labels = training_data_group['labels'][()]
+
+                return cls(m, c, epochs, learning_rate, log_rate, category_1, category_2, training_data, training_labels)
+
+            return cls(m, c, epochs, learning_rate, log_rate, category_1, category_2)
+
+    
+    @classmethod
+    def new_model(cls, training_data: np.ndarray, training_labels: np.ndarray, training_parameters: dict):
+        training_labels = training_labels.T
+
+        # Initialize parameters (m, c) with zeros
+        m = np.zeros((1, training_data.shape[1]))
+        c = float(0)
+
+        return cls(m, c, training_parameters['epochs'], training_parameters['learning-rate'], training_parameters['log-rate'], training_parameters['category-1'], training_parameters['category-2'], training_data, training_labels)

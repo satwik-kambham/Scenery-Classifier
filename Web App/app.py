@@ -1,3 +1,4 @@
+import json
 from queue import Queue
 from threading import Thread
 from flask import Flask, Response, jsonify, render_template, request
@@ -33,7 +34,7 @@ def train():
         images, labels = images[:batch_size], labels[:batch_size]
 
     global model
-    model = Classifier(images, labels, training_parameters)
+    model = Classifier.new_model(images, labels, training_parameters)
 
     p = Thread(target=model.train, args=(add_cost,))
     p.start()
@@ -77,11 +78,15 @@ def predict():
     print(data)
     return jsonify(data)
 
-@app.route('/store', methods = ['GET'])
+@app.route('/store', methods = ['GET', 'POST'])
 def store():
-    json_data = model.to_json()
-    print(json_data)
-    with open('model.json', 'w') as f:
-        f.write(json_data)
-
+    model.to_hdf('../models/'+'model.h5')
     return 'Model stored'
+
+@app.route('/load', methods = ['GET', 'POST'])
+def load():
+    print('Model loaded')
+    global model
+    fname = json.loads(request.data.decode('utf-8'))['fname']
+    model = Classifier.from_hdf('../models/'+fname)
+    return jsonify(model.training_parameters)

@@ -20,7 +20,9 @@
     <!-- Chart.js -->
     <script src="../static/js/chart.js"></script>
 
-    <div class="container">
+    <div class="bg-image"></div>
+
+    <div id="main" class="container">
         <h3>Scenery Classification using Logic Regression</h3>
 
         <table class="u-max-full-width">
@@ -51,7 +53,7 @@
         <form action="upload" method="POST" enctype="multipart/form-data" target="dummyframe">
             <div class="row">
                 <input class="six columns" type="file" name="file" id="file-selector" />
-                <input class="six columns" type="submit" id="upload-image" value="Upload"/>
+                <input class="six columns button-primary" type="submit" id="upload-image" value="Upload"/>
             </div>
         </form>
         <img id="image-preview" src="">

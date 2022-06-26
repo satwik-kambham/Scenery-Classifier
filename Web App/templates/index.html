@@ -20,57 +20,117 @@
     <!-- Chart.js -->
     <script src="../static/js/chart.js"></script>
 
-    <div class="container">
-        <h3>Scenery Classification using Logic Regression</h3>
-        <form action="{{ url_for('train') }}" method="post">
+    <div class="bg-image"></div>
+
+    <div id="main" class="container">
+        <h2>Scenery Classification using Logic Regression</h2>
+        <div id="classify">
+            <h4>Classify using trained model</h4>
             <div class="row">
-                <div class="six columns">
-                    <label for="exampleRecipientInput">Category 1</label>
-                    <select class="u-full-width" name="category-1" id="category-1">
-                        <option value="buildings">Buildings</option>
-                        <option value="forest">Forest</option>
-                        <option value="glacier">Glacier</option>
-                        <option value="mountain">Mountain</option>
-                        <option value="sea">Sea</option>
-                        <option value="street">Street</option>
-                    </select>
-                </div>
-                <div class="six columns">
-                    <label for="exampleRecipientInput">Category 2</label>
-                    <select class="u-full-width" name="category-2" id="category-2">
-                        <option value="buildings">Buildings</option>
-                        <option value="forest">Forest</option>
-                        <option value="glacier">Glacier</option>
-                        <option value="mountain">Mountain</option>
-                        <option value="sea">Sea</option>
-                        <option value="street">Street</option>
-                    </select>
-                </div>
+                <input type="text" id="fname" class="six columns">
+                <button class="button-primary six columns" id="load">Load Model</button>
             </div>
-            <div class="row">
-                <div class="three columns">
-                    <label for="epochs">Epochs</label>
-                    <input class="u-full-width" type="number" placeholder="100" name="epochs" id="epochs">
+
+            <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+            <form action="upload" method="POST" enctype="multipart/form-data" target="dummyframe">
+                <div class="row">
+                    <input class="six columns" type="file" name="file" id="file-selector" />
+                    <input class="six columns button-primary" type="submit" id="upload-image" value="Upload" />
                 </div>
-                <div class="three columns">
-                    <label for="learning-rate">Learning Rate</label>
-                    <input id="learning-rate" class="u-full-width" 
-                    type="number" step="any" placeholder="0.01" name="learning-rate">
+            </form>
+            <img id="image-preview" src="">
+
+            <button class="u-full-width button-primary" id="test" disabled>Classify</button>
+
+            <table class="u-max-full-width">
+                <thead>
+                    <tr>
+                        <th>Prediction</th>
+                        <th>Confidence</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="pred"></td>
+                        <td id="conf"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="u-max-full-width">
+                <thead>
+                    <tr>
+                        <th>Category 1</th>
+                        <th>category 2</th>
+                        <th>Epochs</th>
+                        <th>Learning Rate</th>
+                        <th>Log Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="c1"></td>
+                        <td id="c2"></td>
+                        <td id="ep"></td>
+                        <td id="lr"></td>
+                        <td id="lgr"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <div id="train">
+            <h4>Train new model</h4>
+            <form action="{{ url_for('train') }}" method="post">
+                <div class="row">
+                    <div class="six columns">
+                        <label for="exampleRecipientInput">Category 1</label>
+                        <select class="u-full-width" name="category-1" id="category-1">
+                            <option value="buildings">Buildings</option>
+                            <option value="forest">Forest</option>
+                            <option value="glacier">Glacier</option>
+                            <option value="mountain">Mountain</option>
+                            <option value="sea">Sea</option>
+                            <option value="street">Street</option>
+                        </select>
+                    </div>
+                    <div class="six columns">
+                        <label for="exampleRecipientInput">Category 2</label>
+                        <select class="u-full-width" name="category-2" id="category-2">
+                            <option value="buildings">Buildings</option>
+                            <option value="forest">Forest</option>
+                            <option value="glacier">Glacier</option>
+                            <option value="mountain">Mountain</option>
+                            <option value="sea">Sea</option>
+                            <option value="street">Street</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="three columns">
-                    <label for="log-rate">Log Rate</label>
-                    <input class="u-full-width" id="log-rate" 
-                    type="number" placeholder="10" name="log-rate">
+                <div class="row">
+                    <div class="three columns">
+                        <label for="epochs">Epochs</label>
+                        <input class="u-full-width" type="number" placeholder="100" name="epochs" id="epochs">
+                    </div>
+                    <div class="three columns">
+                        <label for="learning-rate">Learning Rate</label>
+                        <input id="learning-rate" class="u-full-width" type="number" step="any" placeholder="0.01"
+                            name="learning-rate">
+                    </div>
+                    <div class="three columns">
+                        <label for="log-rate">Log Rate</label>
+                        <input class="u-full-width" id="log-rate" type="number" placeholder="10" name="log-rate">
+                    </div>
+                    <div class="three columns">
+                        <label for="batch-size">Batch Size (-1 for all)</label>
+                        <input class="u-full-width" id="batch-size" type="number" placeholder="50" name="batch-size">
+                    </div>
                 </div>
-                <div class="three columns">
-                    <label for="batch-size">Batch Size (-1 for all)</label>
-                    <input class="u-full-width" id="batch-size" 
-                    type="number" placeholder="50" name="batch-size">
-                </div>
-            </div>
-            <input class="u-full-width button-primary" type="submit" value="Train">
-        </form>
+                <input class="u-full-width button-primary" type="submit" value="Train">
+            </form>
+        </div>
     </div>
+
+    <script src="../static/js/index.js"></script>
 </body>
 
 </html>
