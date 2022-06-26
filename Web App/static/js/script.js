@@ -66,13 +66,21 @@ document.getElementById('upload-image').addEventListener('click', (e) => {
 
 document.getElementById('test').addEventListener('click', () => {
     fetch('/predict')
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('pred').innerText = data.label
-        document.getElementById('conf').innerText = data.prediction
-    })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('pred').innerText = data.label
+            document.getElementById('conf').innerText = data.prediction
+        })
 })
 
 document.getElementById('save').addEventListener('click', () => {
-    fetch('/store')
+    fetch('/store', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            fname: document.getElementById('fname').value
+        })
+    })
 })

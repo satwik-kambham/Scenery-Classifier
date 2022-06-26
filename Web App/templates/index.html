@@ -20,14 +20,12 @@
     <!-- Chart.js -->
     <script src="../static/js/chart.js"></script>
 
-    <div class="bg-image"></div>
-
     <div id="main" class="container">
         <h2>Scenery Classification using Logic Regression</h2>
         <div id="classify">
             <h4>Classify using trained model</h4>
             <div class="row">
-                <input type="text" id="fname" class="six columns">
+                <input type="text" id="fname" class="six columns" placeholder="Model Name">
                 <button class="button-primary six columns" id="load">Load Model</button>
             </div>
 
@@ -121,7 +119,7 @@
                         <input class="u-full-width" id="log-rate" type="number" placeholder="10" name="log-rate">
                     </div>
                     <div class="three columns">
-                        <label for="batch-size">Batch Size (-1 for all)</label>
+                        <label for="batch-size">Batch Size</label>
                         <input class="u-full-width" id="batch-size" type="number" placeholder="50" name="batch-size">
                     </div>
                 </div>

@@ -8,16 +8,15 @@ table {
     margin-right: auto;
 }
 
-.bg-image {
+body {
     background-image: url('../assets/alpine.jpg');
-    filter: blur(2px);
-    -webkit-filter: blur(2px);
 
     height: 100%;
 
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    background-attachment: fixed;
 }
 
 #main {
@@ -25,13 +24,11 @@ table {
     background-color: rgba(0, 0, 0, 0.1);
     color: white;
     font-weight: bold;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     z-index: 2;
     text-align: center;
     padding: 20px;
+    filter: blur(0px);
+    -webkit-filter: blur(0px);
 }
 
 canvas {

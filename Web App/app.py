@@ -80,12 +80,13 @@ def predict():
 
 @app.route('/store', methods = ['GET', 'POST'])
 def store():
-    model.to_hdf('../models/'+'model.h5')
+    fname = json.loads(request.data.decode('utf-8'))['fname']
+    print(fname)
+    model.to_hdf('../models/'+fname)
     return 'Model stored'
 
 @app.route('/load', methods = ['GET', 'POST'])
 def load():
-    print('Model loaded')
     global model
     fname = json.loads(request.data.decode('utf-8'))['fname']
     model = Classifier.from_hdf('../models/'+fname)
